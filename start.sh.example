@@ -1,0 +1,16 @@
+#!/bin/bash
+cd ~/discord-delta
+source venv/bin/activate
+
+# First check if RPC server is already running
+if ! pgrep -f "deltachat-rpc-server --listen 127.0.0.1:23123" > /dev/null; then
+    # Start RPC server
+    deltachat-rpc-server --listen 127.0.0.1:23123 &
+    RPC_PID=$!
+    echo "Started DeltaChat RPC server with PID $RPC_PID"
+    sleep 3  # Give it time to start
+fi
+
+# Run the Discord-DeltaChat bridge
+export DISCORD_TOKEN=your_discord_token_here
+python app.py your_email@example.com your_password
